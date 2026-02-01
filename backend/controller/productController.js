@@ -23,13 +23,11 @@ const addProduct = async (req, res,) => {
 const getProduct = async (req, res,) => {
     try {
 
-        let get = req.body;
-        const newProduct = new Product(productData);
-        const addProduct = await newProduct.save();
+        const products = await Product.find();
 
-        if (!addProduct) { return res.res.status(404).send({ err: "Unable to add product!" }); }
+        if (!products) { return res.res.status(404).send({ err: "Unable to Find Product!" }); }
 
-        res.status(200).json({ message: "Product added Successfully!", id: addProduct._id });
+        res.status(200).json({ products: products });
 
 
     } catch (error) {
