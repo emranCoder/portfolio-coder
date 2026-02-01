@@ -38,4 +38,56 @@ const getProduct = async (req, res,) => {
     }
 }
 
-module.exports = { addProduct, getProduct };
+
+const updateProduct = async (req, res) => {
+    try {
+        const { id, ...bodyData } = { ...req.body };
+
+        let newData = bodyData;
+        const product = await Product.findByIdAndUpdate(id, newData);
+
+        if (!product) res.status(400).send({ err: "Unable to Update Data!" });
+
+        res.status(200).json({ message: "You Got An Update!", data: product });
+
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            err: "Bad Request!"
+        })
+    }
+}
+
+
+
+const deleteProduct = async (req, res) => {
+    try {
+
+        const id = req.body.id;
+
+        const product = await Product.findByIdAndDelete(id);
+
+        if (!product) res.status(400).send({ err: "Unable to Update Data!" });
+
+        res.status(200).json({ message: "Deleted Successfully!" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            err: "Bad Request!"
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+module.exports = { addProduct, getProduct, updateProduct, deleteProduct };
