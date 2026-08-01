@@ -7,7 +7,7 @@ const addProduct = async (req, res,) => {
         const newProduct = new Product(productData);
         const addProduct = await newProduct.save();
 
-        if (!addProduct) { return res.res.status(404).send({ err: "Unable to add product!" }); }
+        if (!addProduct) { return res.status(404).send({ err: "Unable to add product!" }); }
 
         res.status(200).json({ message: "Product added Successfully!", id: addProduct._id });
 
@@ -26,7 +26,7 @@ const getProduct = async (req, res,) => {
         console.log(id);
         const product = await Product.findById(id);
 
-        if (!product) { return res.res.status(404).send({ err: "Unable to Find Product!" }); }
+        if (!product) { return res.status(404).send({ err: "Unable to Find Product!" }); }
 
         res.status(200).json({ products: product });
 
@@ -43,7 +43,7 @@ const getProducts = async (req, res,) => {
 
         const products = await Product.find();
 
-        if (!products) { return res.res.status(404).send({ err: "Unable to Find Product!" }); }
+        if (!products) { return res.status(404).send({ err: "Unable to Find Product!" }); }
 
         res.status(200).json({ products: products });
 
