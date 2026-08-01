@@ -24,11 +24,11 @@ const getProduct = async (req, res,) => {
     try {
         const id = req.params.id;
         console.log(id);
-        const products = await Product.findById(id);
+        const product = await Product.findById(id);
 
-        if (!products) { return res.res.status(404).send({ err: "Unable to Find Product!" }); }
+        if (!product) { return res.res.status(404).send({ err: "Unable to Find Product!" }); }
 
-        res.status(200).json({ products: products });
+        res.status(200).json({ products: product });
 
 
     } catch (error) {
@@ -87,7 +87,7 @@ const deleteProduct = async (req, res) => {
 
         const product = await Product.findByIdAndDelete(id);
 
-        if (!product) res.status(400).send({ err: "Unable to Update Data!" });
+        if (!product) res.status(400).send({ err: "Unable to Delete Data!" });
 
         res.status(200).json({ message: "Deleted Successfully!" });
 
