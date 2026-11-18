@@ -1,111 +1,100 @@
-const Product = require('../models/product');
+const Product = require("../models/product");
 
-const addProduct = async (req, res,) => {
-    try {
+const addProduct = async (req, res) => {
+  try {
+    let productData = req.body;
+    const newProduct = new Product(productData);
+    const addProduct = await newProduct.save();
 
-        let productData = req.body;
-        const newProduct = new Product(productData);
-        const addProduct = await newProduct.save();
-
-        if (!addProduct) { return res.status(404).send({ err: "Unable to add product!" }); }
-
-        res.status(200).json({ message: "Product added Successfully!", id: addProduct._id });
-
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            err: "Bad request!"
-        });
+    if (!addProduct) {
+      return res.status(404).send({ err: "Unable to add product!" });
     }
-}
 
-const getProduct = async (req, res,) => {
-    try {
-        const id = req.params.id;
-        console.log(id);
-        const product = await Product.findById(id);
+    res
+      .status(200)
+      .json({ message: "Product added Successfully!", id: addProduct._id });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      err: "Bad request!",
+    });
+  }
+};
 
-        if (!product) { return res.status(404).send({ err: "Unable to Find Product!" }); }
+const getProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const product = await Product.findById(id);
 
-        res.status(200).json({ products: product });
-
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            err: "Bad request!"
-        });
+    if (!product) {
+      return res.status(404).send({ err: "Unable to Find Product!" });
     }
-}
-const getProducts = async (req, res,) => {
-    try {
 
-        const products = await Product.find();
+    res.status(200).json({ products: product });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      err: "Bad request!",
+    });
+  }
+};
+const getProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
 
-        if (!products) { return res.status(404).send({ err: "Unable to Find Product!" }); }
-
-        res.status(200).json({ products: products });
-
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            err: "Bad request!"
-        });
+    if (!products) {
+      return res.status(404).send({ err: "Unable to Find Product!" });
     }
-}
 
+    res.status(200).json({ products: products });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      err: "Bad request!",
+    });
+  }
+};
 
 const updateProduct = async (req, res) => {
-    try {
-        const { id, ...bodyData } = { ...req.body };
+  try {
+    const { id, ...bodyData } = { ...req.body };
 
-        let newData = bodyData;
-        const product = await Product.findByIdAndUpdate(id, newData);
+    let newData = bodyData;
+    const product = await Product.findByIdAndUpdate(id, newData);
 
-        if (!product) res.status(400).send({ err: "Unable to Update Data!" });
+    if (!product) res.status(400).send({ err: "Unable to Update Data!" });
 
-        res.status(200).json({ message: "You Got An Update!", data: product });
-
-
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            err: "Bad Request!"
-        })
-    }
-}
-
-
+    res.status(200).json({ message: "You Got An Update!", data: product });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      err: "Bad Request!",
+    });
+  }
+};
 
 const deleteProduct = async (req, res) => {
-    try {
+  try {
+    const id = req.body.id;
 
-        const id = req.body.id;
+    const product = await Product.findByIdAndDelete(id);
 
-        const product = await Product.findByIdAndDelete(id);
+    if (!product) res.status(400).send({ err: "Unable to Delete Data!" });
 
-        if (!product) res.status(400).send({ err: "Unable to Delete Data!" });
+    res.status(200).json({ message: "Deleted Successfully!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      err: "Bad Request!",
+    });
+  }
+};
 
-        res.status(200).json({ message: "Deleted Successfully!" });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            err: "Bad Request!"
-        })
-    }
-}
-
-
-
-
-
-
-
-
-
-
-module.exports = { addProduct, getProducts, getProduct, updateProduct, deleteProduct };
+module.exports = {
+  addProduct,
+  getProducts,
+  getProduct,
+  updateProduct,
+  deleteProduct,
+};
